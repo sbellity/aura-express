@@ -1,0 +1,14 @@
+{
+  "name": "aura-express",
+  "version": "0.1.0",
+  "main": "./lib/main.js",
+  "dependencies": {
+    "jquery": "*",
+    "underscore": "*",
+    "eventemitter2": "*",
+    "requirejs": "~2.0"
+  },
+  "_id": "aura-express@0.1.0",
+  "readme": "ERROR: No README.md file found!",
+  "description": "ERROR: No README.md file found!"
+}
