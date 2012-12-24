@@ -6,7 +6,8 @@
     "jquery": "*",
     "underscore": "*",
     "eventemitter2": "*",
-    "requirejs": "~2.0"
+    "requirejs": "~2.0",
+    "requirejs-text" : "*"
   },
   "_id": "aura-express@0.1.0",
   "readme": "ERROR: No README.md file found!",
