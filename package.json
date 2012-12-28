@@ -1,0 +1,9 @@
+{
+  "name": "aura-express",
+  "version": "0.1.0",
+  "devDependencies": {
+    "grunt": "~0.3",
+    "grunt-contrib": "~0.3",
+    "grunt-jasmine-task": "~0.2"
+  }
+}
