@@ -28,7 +28,7 @@ module.exports = function(grunt) {
 
     // jasmine testsuites
     jasmine: {
-      files: ['spec/index.html']
+      files: ['spec/spec.html']
     },
 
     watch: {
@@ -38,6 +38,7 @@ module.exports = function(grunt) {
   });
 
   // default build task
-  grunt.registerTask('default', 'server watch');
+  grunt.registerTask('launch', 'server watch');
+  grunt.registerTask('default', 'lint dox');
 
 };
