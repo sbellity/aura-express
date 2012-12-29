@@ -17,7 +17,8 @@ define(['chai', 'sinonChai'], function(chai, sinonChai) {
 
   var specs = [
     'spec/lib/aura_spec',
-    'spec/lib/ext/widgets_spec'
+    'spec/lib/ext/widgets_spec',
+    'spec/lib/ext/pubsub_spec'
   ]
   require(specs, runMocha);
  

@@ -14,7 +14,7 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
     return container;
   }
 
-  describe("Widgets Widgets Widgets", function() {
+  describe("Widgets API", function() {
 
     var env, BaseWidget,
         ext = function(appEnv) { env = appEnv; };
@@ -79,11 +79,15 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
         render.should.have.been.calledWith("nope");
       });
 
-
     });
 
-    describe("Adding new widgets source locations...", function() {
+    describe("Nesting Widgets", function() {
+      it("Should be possible to nest widgets...");
+    });
 
+
+    describe("Adding new widgets source locations...", function() {
+      it("Should be possible to add new sources locations for widgets #123");
     });
 
 

@@ -7,6 +7,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-dox');
 
+  var port = 8899;
+
   // ==========================================================================
   // Project configuration
   // ==========================================================================
@@ -23,7 +25,7 @@ module.exports = function(grunt) {
     connect: {
       server: {
         options: {
-          port: 8899,
+          port: port,
           base: '.'
         }
       }
@@ -58,7 +60,7 @@ module.exports = function(grunt) {
 
     mocha: {
       aura: {
-        src: ['spec/index.html']
+        src: ['http://localhost:' + port + "/spec/index.html"]
       }
     },
 
