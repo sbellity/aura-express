@@ -2,7 +2,8 @@ module.exports = function(grunt) {
   'use strict';
 
   grunt.loadNpmTasks('grunt-contrib');
-  grunt.loadNpmTasks('grunt-dox');
+  grunt.loadNpmTasks('grunt-mocha');
+  // grunt.loadNpmTasks('grunt-dox');
 
   // ==========================================================================
   // Project configuration
@@ -23,12 +24,15 @@ module.exports = function(grunt) {
     },
 
     lint: {
-      files: ['lib/**/*.js']
+      files: ['lib/**/*.js', 'spec/lib/**/*.js']
     },
 
     // jasmine testsuites
-    jasmine: {
-      files: ['spec/spec.html']
+    mocha: {
+      all: {
+        src: 'spec/index.html',
+        run: true
+      }
     },
 
     watch: {

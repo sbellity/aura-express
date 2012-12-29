@@ -1,8 +1,4 @@
-define(['aura/aura'], function(Aura, SpecHelper) {
-  var assert = chai.assert,
-      expect = chai.expect,
-      should = chai.should();
-
+define(['aura/aura'], function(Aura) {
   describe("Aura Public API", function() {
 
     var ext = {
