@@ -5,31 +5,30 @@ define(['aura/aura'], function(aura) {
 
   describe("Aura Main", function() {
     describe("App Public API", function() {
-      var core, sandbox;
+    
+      var env;
       var ext = {
-        init: sinon.spy(function(appCore) {
-          core = appCore;
+        init: sinon.spy(function(appEnv) {
+          env = appEnv;
+          env.sandbox.foo = "bar";
         }),
-        beforeAppStart: sinon.spy(),
-        afterAppStart: sinon.spy(),
-        sandbox: sinon.spy(function(appSandbox, core) {
-          sandbox = appSandbox;
-          sandbox.foo = "bar";
-        })
+        afterAppStart: sinon.spy()
       };
 
-      var app = aura().use(ext);
-      var initStatus = app.start([]);
+      var app = aura({ debug: true });
+      
+      app.use(ext);
+
+      var startOptions = { foo: "bar" };
+      var initStatus = app.start(startOptions);
 
       // Make sure the app is started before...
       before(function(done) {
-        initStatus.then(function() {
-          done();
-        });
+        initStatus.then(function() { done(); });
       });
 
       it("Should have loaded its core dependencies", function() {
-        core.data.deferred.should.be.a('function');
+        env.core.data.deferred.should.be.a('function');
       });
 
       it("Should have a public API", function() {
@@ -38,19 +37,20 @@ define(['aura/aura'], function(aura) {
         app.stop.should.be.a('function');
       });
         
-      it("Should load its extension and callbacks", function() {
-        ext.init.should.have.been.called;
-        ext.beforeAppStart.should.have.been.called;
-        ext.afterAppStart.should.have.been.called;
-        ext.sandbox.should.have.been.called;
+      it("Should call init method on extension", function() {
+        ext.init.should.have.been.calledWith(env);
       });
-
+            
+      it("Should call afterAppStart method on extension", function() {
+        ext.afterAppStart.should.have.been.calledWith(env);
+      });
+      
       it("Should have extended the sandbox", function() {
-        sandbox.foo.should.equal('bar');
+        env.sandbox.foo.should.equal('bar');
       });
 
       it("Should complain if I try to use a new extension and the app is already started", function() {
-        // initStatus.done()
+        expect(app.use).to.throw(Error);
       });
     });
 
@@ -58,21 +58,21 @@ define(['aura/aura'], function(aura) {
 
       it("Should be able to use extensions defined as objects", function(done) {
         var ext = { init: sinon.spy() };
-        aura().use(ext).start([]).done(function() {
+        aura().use(ext).start({ widgets: [] }).done(function() {
           sinon.assert.called(ext.init);
           done();
         });
       });
 
       it("Should be able to use extensions defined as functions", function(done) {
-        var core;
+        var env;
         var insideExt = sinon.spy();
-        var ext = sinon.spy(function(appCore) {
-          core = appCore;
-          insideExt("foo");
+        var ext = sinon.spy(function(appEnv) {
+          env = appEnv;
+          insideExt('foo');
         });
         aura().use(ext).start([]).done(function() {
-          ext.should.have.been.calledWith(core);
+          ext.should.have.been.calledWith(env);
           insideExt.should.have.been.calledWith('foo');
           done();
         });

@@ -9,8 +9,8 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
   describe("Widgets Widgets Widgets", function() {
 
-    var core, Widget,
-        ext = function(appCore) { core = appCore; };
+    var env, Widget,
+        ext = function(appEnv) { env = appEnv; };
 
     var yeahWidget = { initialize: sinon.spy(function() { this.html('yeah'); }) };
     define("__widget__$default$yeah", yeahWidget);
@@ -23,15 +23,15 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
       appsContainer.append(container);
 
       app.start("#" + containerId).then(function() {
-        Widget = core.Widgets.Base;
+        Widget = env.core.Widgets.Base;
         done();
       });
     });
 
     describe("Widgets Extension", function() {
       it("Should define the widgets registry and base Widget on core", function() {
-        core.Widgets.should.be.a('object');
-        core.Widgets.Base.should.be.a('function');
+        env.core.Widgets.should.be.a('object');
+        env.core.Widgets.Base.should.be.a('function');
       });
     });
 
