@@ -1,18 +1,28 @@
 define(['aura/aura'], function(Aura) {
-  describe("App Public API", function() {
 
+  describe("App Public API", function() {
+    var core, sandbox;
     var ext = {
-      init: sinon.spy(),
+      init: sinon.spy(function(appCore) {
+        core = appCore;
+      }),
       beforeAppStart: sinon.spy(),
-      afterAppStart: sinon.spy()
+      afterAppStart: sinon.spy(),
+      sandbox: sinon.spy(function(appSandbox, core) {
+        sandbox = appSandbox;
+        sandbox.foo = "bar";
+      })
     };
 
     var app = Aura().use(ext);
     var initStatus = app.start();
     var foo = "foo";
 
-    it("Should have loaded its core dependencies", function() {
-      foo.should.be.a('string');
+    it("Should have loaded its core dependencies", function(done) {
+      initStatus.done(function() {
+        core.data.deferred.should.be.a('function');
+        done();
+      });
     });
 
     it("Should have a public API", function() {
@@ -26,15 +36,23 @@ define(['aura/aura'], function(Aura) {
         done();
       });
     });
-
-    it("Should load its extension", function(done) {
+    
+    it("Should load its extension and callbacks", function(done) {
       initStatus.done(function() {
-        sinon.assert.called(ext.init);
-        sinon.assert.called(ext.beforeAppStart);
-        sinon.assert.called(ext.afterAppStart);
+        ext.init.should.have.been.called;
+        ext.beforeAppStart.should.have.been.called;
+        ext.afterAppStart.should.have.been.called;
+        ext.sandbox.should.have.been.called;
         done();
       });
     });
+
+    it("Should have extended the sandbox", function(done) {
+      initStatus.done(function() {
+        sandbox.foo.should.equal('bar');
+        done();
+      });
+    })
   });
 
   describe("Defining and loading extensions", function() {
@@ -55,8 +73,8 @@ define(['aura/aura'], function(Aura) {
         insideExt("foo");
       });
       Aura().use(ext).start().done(function() {
-        sinon.assert.calledWith(ext, core);
-        sinon.assert.calledWith(insideExt, "foo");
+        ext.should.have.been.calledWith(core);
+        insideExt.should.have.been.calledWith('foo');
         done();
       });
     });
