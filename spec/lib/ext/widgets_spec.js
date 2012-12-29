@@ -82,6 +82,11 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
     });
 
+    describe("Adding new widgets source locations...", function() {
+
+    });
+
+
   });
 
 
