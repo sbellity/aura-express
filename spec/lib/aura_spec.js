@@ -1,7 +1,7 @@
 define(['aura/aura'], function(aura) {
 
   'use strict';
-  /*global describe:true, it:true, before: true, sinon: true, assert: true, should: true */
+  /*global describe:true, it:true, before: true, sinon: true */
 
   describe("Aura Main", function() {
     describe("App Public API", function() {
@@ -15,7 +15,7 @@ define(['aura/aura'], function(aura) {
         afterAppStart: sinon.spy()
       };
 
-      var app = aura({ debug: true });
+      var app = aura();
       
       app.use(ext);
 
@@ -50,7 +50,7 @@ define(['aura/aura'], function(aura) {
       });
 
       it("Should complain if I try to use a new extension and the app is already started", function() {
-        expect(app.use).to.throw(Error);
+        app.use.should.Throw(Error);
       });
     });
 
@@ -59,7 +59,7 @@ define(['aura/aura'], function(aura) {
       it("Should be able to use extensions defined as objects", function(done) {
         var ext = { init: sinon.spy() };
         aura().use(ext).start({ widgets: [] }).done(function() {
-          sinon.assert.called(ext.init);
+          ext.init.should.have.been.called;
           done();
         });
       });
@@ -71,18 +71,33 @@ define(['aura/aura'], function(aura) {
           env = appEnv;
           insideExt('foo');
         });
-        aura().use(ext).start([]).done(function() {
+        aura().use(ext).start().done(function() {
           ext.should.have.been.calledWith(env);
           insideExt.should.have.been.calledWith('foo');
           done();
         });
       });
 
+      it("Should pass the start options to the extensions...", function(done) {
+        var env;
+        var startOptions = { foo: 'bar' };
+        var insideExt = sinon.spy();
+        var ext = sinon.spy(function(appEnv) {
+          env = appEnv;
+          insideExt(env.options);
+        });
+        aura().use(ext).start(startOptions).done(function() {
+          ext.should.have.been.calledWith(env);
+          insideExt.should.have.been.calledWith(startOptions);
+          done();
+        });
+      })
+
       it("Should be able to use extensions defined as amd modules", function(done) {
         var ext = { init: sinon.spy() };
         define("myExtensionModule", ext);
-        aura().use("myExtensionModule").start([]).done(function() {
-          sinon.assert.called(ext.init);
+        aura().use("myExtensionModule").start().done(function() {
+          ext.init.should.have.been.called;
           done();
         });
       });
