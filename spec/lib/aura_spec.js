@@ -91,7 +91,7 @@ define(['aura/aura'], function(aura) {
           insideExt.should.have.been.calledWith(startOptions);
           done();
         });
-      })
+      });
 
       it("Should be able to use extensions defined as amd modules", function(done) {
         var ext = { init: sinon.spy() };
