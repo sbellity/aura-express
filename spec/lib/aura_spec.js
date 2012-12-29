@@ -1,5 +1,5 @@
 define(['aura/aura'], function(Aura) {
-  describe("Aura Public API", function() {
+  describe("App Public API", function() {
 
     var ext = {
       init: sinon.spy(),
@@ -7,7 +7,7 @@ define(['aura/aura'], function(Aura) {
       afterAppStart: sinon.spy()
     };
 
-    var app = Aura({ debug: true }).use(ext);
+    var app = Aura().use(ext);
     var initStatus = app.start();
     var foo = "foo";
 
@@ -35,5 +35,41 @@ define(['aura/aura'], function(Aura) {
         done();
       });
     });
+  });
+
+  describe("Defining and loading extensions", function() {
+
+    it("Should be able to use extensions defined as objects", function(done) {
+      var ext = { init: sinon.spy() };
+      Aura().use(ext).start().done(function() {
+        sinon.assert.called(ext.init);
+        done();
+      });
+    });
+
+    it("Should be able to use extensions defined as functions", function(done) {
+      var core;
+      var insideExt = sinon.spy();
+      var ext = sinon.spy(function(appCore) {
+        core = appCore;
+        insideExt("foo");
+      });
+      Aura().use(ext).start().done(function() {
+        sinon.assert.calledWith(ext, core);
+        sinon.assert.calledWith(insideExt, "foo");
+        done();
+      });
+    });
+
+    it("Should be able to use extensions defined as amd modules", function(done) {
+      var ext = { init: sinon.spy() };
+      define("myExtensionModule", ext);
+      Aura().use("myExtensionModule").start().done(function() {
+        sinon.assert.called(ext.init);
+        done();
+      });
+    });
+
+
   });
 });
