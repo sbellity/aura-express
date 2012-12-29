@@ -1,4 +1,8 @@
-define(['aura/aura', 'aura/ext/widgets'], function(Aura, ext) {
+define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
+
+  'use strict';
+  /*global describe:true, it:true, beforeEach: true, sinon: true */
+
   
   var appsContainer = $('<div>').attr('style', 'display:none');
   $('body').append(appsContainer);
@@ -6,12 +10,13 @@ define(['aura/aura', 'aura/ext/widgets'], function(Aura, ext) {
   describe("Widgets Widgets Widgets", function() {
 
     var core, Widget,
-    ext = function(appCore) { core = appCore; }
+        ext = function(appCore) { core = appCore; };
 
-    define("__widget__$default$yeah", { initialize: function() { this.html('yeah'); } });
+    var yeahWidget = { initialize: sinon.spy(function() { this.html('yeah'); }) };
+    define("__widget__$default$yeah", yeahWidget);
 
     beforeEach(function(done) {
-      var app = Aura().use(ext),
+      var app = aura().use(ext),
           containerId = _.uniqueId('widgets_spec_'),
           container   = $("<div/>") .attr('id', containerId)
                                     .html('<div data-aura-widget="dummy"></div><div data-aura-widget="yeah"></div>');
@@ -27,6 +32,12 @@ define(['aura/aura', 'aura/ext/widgets'], function(Aura, ext) {
       it("Should define the widgets registry and base Widget on core", function() {
         core.Widgets.should.be.a('object');
         core.Widgets.Base.should.be.a('function');
+      });
+    });
+
+    describe("Loading Widgets", function() {
+      it("Should call the widget's initialize method on start", function() {
+        yeahWidget.initialize.should.have.been.called;
       });
     });
 

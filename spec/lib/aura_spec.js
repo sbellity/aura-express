@@ -1,4 +1,7 @@
-define(['aura/aura'], function(Aura) {
+define(['aura/aura'], function(aura) {
+
+  'use strict';
+  /*global describe:true, it:true, before: true, sinon: true, assert: true, should: true */
 
   describe("Aura Main", function() {
     describe("App Public API", function() {
@@ -15,7 +18,7 @@ define(['aura/aura'], function(Aura) {
         })
       };
 
-      var app = Aura().use(ext);
+      var app = aura().use(ext);
       var initStatus = app.start([]);
 
       // Make sure the app is started before...
@@ -35,7 +38,6 @@ define(['aura/aura'], function(Aura) {
         app.stop.should.be.a('function');
       });
         
-      f = sinon.spy();
       it("Should load its extension and callbacks", function() {
         ext.init.should.have.been.called;
         ext.beforeAppStart.should.have.been.called;
@@ -56,7 +58,7 @@ define(['aura/aura'], function(Aura) {
 
       it("Should be able to use extensions defined as objects", function(done) {
         var ext = { init: sinon.spy() };
-        Aura().use(ext).start([]).done(function() {
+        aura().use(ext).start([]).done(function() {
           sinon.assert.called(ext.init);
           done();
         });
@@ -69,7 +71,7 @@ define(['aura/aura'], function(Aura) {
           core = appCore;
           insideExt("foo");
         });
-        Aura().use(ext).start([]).done(function() {
+        aura().use(ext).start([]).done(function() {
           ext.should.have.been.calledWith(core);
           insideExt.should.have.been.calledWith('foo');
           done();
@@ -79,11 +81,11 @@ define(['aura/aura'], function(Aura) {
       it("Should be able to use extensions defined as amd modules", function(done) {
         var ext = { init: sinon.spy() };
         define("myExtensionModule", ext);
-        Aura().use("myExtensionModule").start([]).done(function() {
+        aura().use("myExtensionModule").start([]).done(function() {
           sinon.assert.called(ext.init);
           done();
         });
       });
     });
-  })
+  });
 });
