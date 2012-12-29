@@ -10,7 +10,13 @@ define(['chai', 'sinon', 'sinon_chai', 'mocha'], function(chai, sinon, sinonChai
   chai.use(sinonChai);
   mocha.setup('bdd');
 
-  require(['spec/lib/aura_spec'], function() {
+
+  var specs = [
+    'spec/lib/aura_spec',
+    'spec/lib/ext/widgets_spec'
+  ]
+
+  require(specs, function() {
     if (window.mochaPhantomJS) mochaPhantomJS.run()
     else mocha.run();
   });
