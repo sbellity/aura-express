@@ -66,12 +66,12 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['lib/**/*.js', 'spec/lib/**/*.js'],
-      tasks: ['jshint']
+      tasks: ['jshint', 'mocha']
     }
   });
 
   // default build task
-  grunt.registerTask('default', ['connect', 'jshint', 'watch']);
-  grunt.registerTask('build', ['jshint','dox']);
+  grunt.registerTask('default', ['connect', 'jshint', 'mocha', 'watch']);
+  grunt.registerTask('build', ['jshint','mocha', 'dox']);
 
 };
