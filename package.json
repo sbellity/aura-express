@@ -11,9 +11,12 @@
     "grunt-contrib-clean" : "~0.1",
     "grunt-contrib-watch" : "~0.1",
     "grunt-contrib-connect": "~0.1",
-    "grunt-contrib-requirejs" : "~0.1",
+    "grunt-contrib-requirejs" : "~0.3",
     "grunt-contrib-jshint": "~0.1",
     "grunt-mocha": "~0.2",
     "grunt-dox": "*"
+  },
+  "scripts":{
+    "test": "grunt build"
   }
 }

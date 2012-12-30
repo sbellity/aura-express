@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-dox');
 
@@ -14,7 +15,9 @@ module.exports = function(grunt) {
   // ==========================================================================
 
   grunt.initConfig({
+
     pkg: grunt.file.readJSON('package.json'),
+    
     dox: {
       files: {
         src: 'lib/**/*.js',
@@ -27,6 +30,15 @@ module.exports = function(grunt) {
         options: {
           port: port,
           base: '.'
+        }
+      }
+    },
+
+    requirejs: {
+      compile: {
+        options: {
+          baseUrl: '.',
+          out: 'dist/aura.js'
         }
       }
     },
@@ -72,6 +84,6 @@ module.exports = function(grunt) {
 
   // default build task
   grunt.registerTask('default', ['connect', 'jshint', 'mocha', 'watch']);
-  grunt.registerTask('build', ['jshint','mocha', 'dox']);
+  grunt.registerTask('build', ['jshint', 'connect', 'mocha']);
 
 };
