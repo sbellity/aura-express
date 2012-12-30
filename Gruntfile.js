@@ -38,6 +38,19 @@ module.exports = function(grunt) {
       compile: {
         options: {
           baseUrl: '.',
+          optimize: 'none',
+          preserveLicenseComments: false,
+          paths: { 
+            aura:         'lib',
+            jquery:       'components/jquery/jquery',
+            underscore:   'components/underscore/underscore',
+            eventemitter: 'components/eventemitter2/lib/eventemitter2'
+          },
+          shim: {
+            underscore: { exports: '_' }
+          },
+          include: ['aura/aura', 'aura/ext/debug', 'aura/ext/pubsub', 'aura/ext/widgets'],
+          exclude: ['jquery'],
           out: 'dist/aura.js'
         }
       }
@@ -78,12 +91,13 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['lib/**/*.js', 'spec/lib/**/*.js'],
-      tasks: ['jshint', 'mocha']
+      tasks: ['build']
     }
   });
 
   // default build task
-  grunt.registerTask('default', ['connect', 'jshint', 'mocha', 'watch']);
-  grunt.registerTask('build', ['jshint', 'connect', 'mocha']);
+  grunt.registerTask('build', ['jshint', 'mocha', 'requirejs']);
+  grunt.registerTask('default', ['connect', 'build', 'watch']);
+  grunt.registerTask('dist', ['connect', 'build']);
 
 };
