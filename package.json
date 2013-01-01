@@ -16,9 +16,10 @@
     "grunt-contrib-jshint": "~0.1",
     "grunt-bower-task": "*",
     "grunt-mocha": "~0.2",
-    "grunt-dox": "*"
+    "grunt-dox": "*",
+     "mocha-phantomjs": "*"
   },
   "scripts":{
-    "test": "node_modules/.bin/grunt spec"
+    "test": "node_modules/.bin/mocha-phantomjs http://localhost:8899/spec/index.html"
   }
 }
