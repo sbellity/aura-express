@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-dox');
@@ -33,7 +34,15 @@ module.exports = function(grunt) {
         }
       }
     },
-
+    bower: {
+      install: {
+        options: {
+          cleanup: true,
+          install: true,
+          targetDir: './vendor'
+        }
+      }
+    },
     requirejs: {
       compile: {
         options: {
