@@ -13,13 +13,24 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
     return container;
   }
 
+  function makeSpyWidget(name, definition) {
+    // sourceName = sourceName || "default";
+    if (!/\@/.test(name)) { 
+      name = name + "@default"; 
+    }
+    definition = definition || { initialize: sinon.spy() };
+    var spyWidget = sinon.spy(function() { return definition; });
+    define("__widget__$" + name, spyWidget);
+    return spyWidget;
+  }
+
   describe("Widgets API", function() {
 
     var env, app, BaseWidget,
         ext = function(appEnv) { env = appEnv; };
 
-    var yeahWidget = { initialize: sinon.spy(function() { this.html('yeah'); }) };
-    define("__widget__$yeah@default", yeahWidget);
+    var yeahInit = sinon.spy();
+    var yeahWidget = makeSpyWidget("yeah", { initialize: yeahInit });
 
     describe("Playing with Widgets", function() {
 
@@ -44,7 +55,7 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
       describe("Loading Widgets", function() {
 
         it("Should call the widget's initialize method on start", function() {
-          yeahWidget.initialize.should.have.been.called;
+          yeahInit.should.have.been.called;
         });
 
       });
@@ -79,7 +90,7 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
       // An extension to load it
       var ext = {
         init: function(env) {
-          env.sandbox.registerWidgetType("NewWidgetType", NewWidgetType);
+          env.core.registerWidgetType("NewWidgetType", NewWidgetType);
         }
       };
 
@@ -94,7 +105,8 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
         render: render, 
         foo: "nope" 
       };
-      define("__widget__$my_widget@default", my_widget);
+
+      makeSpyWidget("my_widget", my_widget);
 
       before(function(done) {
         var container = buildAppMarkup('<div data-aura-widget="my_widget"></div>');
@@ -125,25 +137,57 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
     describe("Adding new widgets source locations...", function() {
 
-      var env;
-      var myExternalWidget = sinon.spy(function() { return { initialize: sinon.spy(), render: sinon.spy() }; });
-      var ext = { init: function(appEnv) { env = appEnv; } };
+      var app, myExternalWidget = makeSpyWidget('ext_widget@anotherSource');
+
 
       before(function(done) {
-        var container = buildAppMarkup('<div data-aura-widget="ext_widget@anotherSource"></div>');
-        var app = aura(appConfig);
+        var env;
+        var ext = { init: function(appEnv) { env = appEnv; } };
+        app = aura();
         app.use(ext);
-        app.addWidgetsSource("anotherSource", "remoteWidgets");
-        define("__widget__$ext_widget@anotherSource", myExternalWidget);
-        app.start({ widgets: container }).done(function() { setTimeout(done, 0); });
+        
+        // Adding the source
+        app.registerWidgetsSource("anotherSource", "remoteWidgets");
+        
+        // app start...
+        var container = buildAppMarkup('<div data-aura-widget="ext_widget@anotherSource"></div>');
+        app.start({ widgets: container }).done(function() { 
+          setTimeout(done, 0); 
+        });
       });
 
-      it("Should be possible to add new sources locations for widgets #123", function() {
+      it("Should be possible to add new sources locations for widgets", function() {
         myExternalWidget.should.have.been.called;
       });
+
+      it("Should complain if we try to add a source that has already been registered", function() {
+        var err = function() { app.registerWidgetsSource('anotherSource', '...'); };
+        err.should.Throw("Widgets source 'anotherSource' is already registered");
+      });
+
     });
 
+    describe("Adding new widgets source via an extension", function() {
 
+      var anExternalWidget = makeSpyWidget('ext_widget@aSource');
+      
+      var app, env, ext = { 
+        init: function(appEnv) {
+          env = appEnv;
+          env.core.registerWidgetsSource('aSource', 'aUrl');
+        } 
+      };
+      before(function(done) {
+        var container = buildAppMarkup('<div data-aura-widget="ext_widget@aSource"></div>');
+        app = aura();
+        app.use(ext).start({ widgets: container }).done(function() { setTimeout(done, 0); });
+      });
+
+      it("Should load the source via the extension", function() {
+        anExternalWidget.should.have.been.called;
+      });
+
+    });
   });
 
 
