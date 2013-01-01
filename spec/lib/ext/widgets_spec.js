@@ -3,7 +3,7 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
   'use strict';
   /*global describe:true, it:true, beforeEach: true, before: true, alert: true, sinon: true */
 
-  
+  var appConfig = { widgets: "spec/widgets" };
   var appsContainer = $('<div>').attr('style', 'display:none');
   $('body').append(appsContainer);
 
@@ -19,12 +19,12 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
         ext = function(appEnv) { env = appEnv; };
 
     var yeahWidget = { initialize: sinon.spy(function() { this.html('yeah'); }) };
-    define("__widget__$default$yeah", yeahWidget);
+    define("__widget__$yeah@default", yeahWidget);
 
     describe("Playing with Widgets", function() {
 
       beforeEach(function(done) {
-        app = aura().use(ext);
+        app = aura(appConfig).use(ext);
         var container = buildAppMarkup('<div id="dummy-' + app.ref + '" data-aura-widget="dummy"></div><div data-aura-widget="yeah"></div>');
         app.start({ widgets: container }).then(function() {
           BaseWidget = env.core.Widgets.Base;
@@ -94,17 +94,17 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
         render: render, 
         foo: "nope" 
       };
-      define("__widget__$default$my_widget", my_widget);
+      define("__widget__$my_widget@default", my_widget);
 
       before(function(done) {
         var container = buildAppMarkup('<div data-aura-widget="my_widget"></div>');
-        var app = aura();
+        var app = aura(appConfig);
         app.use(ext).start({ widgets: container }).done(function() { 
           // Hum... a little bit hacky
           // The promise resolves when the app is loaded...
           // not when the widgets are started...
           // TODO: what should we do ?
-          setTimeout(done, 100); 
+          setTimeout(done, 0); 
         });
       });
 
@@ -124,13 +124,23 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
 
     describe("Adding new widgets source locations...", function() {
-      it("Should be possible to add new sources locations for widgets #123");
-      // Source locations: 'default' points to the path defined on requirejs
-      // as '/widgets'
-      // We should be able to load widets from another 'source' meaning
-      // another server or an other path on the same domain
-      // This could be done either by providing the full url of the widget
-      // or by registering 'sources' that could be distribution endpoints for widgets
+
+      var env;
+      var myExternalWidget = sinon.spy(function() { return { initialize: sinon.spy(), render: sinon.spy() }; });
+      var ext = { init: function(appEnv) { env = appEnv; } };
+
+      before(function(done) {
+        var container = buildAppMarkup('<div data-aura-widget="ext_widget@anotherSource"></div>');
+        var app = aura(appConfig);
+        app.use(ext);
+        app.addWidgetsSource("anotherSource", "remoteWidgets");
+        define("__widget__$ext_widget@anotherSource", myExternalWidget);
+        app.start({ widgets: container }).done(function() { setTimeout(done, 0); });
+      });
+
+      it("Should be possible to add new sources locations for widgets #123", function() {
+        myExternalWidget.should.have.been.called;
+      });
     });
 
 
