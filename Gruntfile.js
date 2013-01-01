@@ -107,6 +107,6 @@ module.exports = function(grunt) {
   // default build task
   grunt.registerTask('build', ['jshint', 'mocha', 'requirejs']);
   grunt.registerTask('default', ['connect', 'build', 'watch']);
-  grunt.registerTask('spec', ['connect', 'build']);
+  grunt.registerTask('spec', ['bower', 'connect', 'build']);
 
 };
