@@ -48,17 +48,16 @@ module.exports = function(grunt) {
         options: {
           baseUrl: '.',
           optimize: 'none',
-          preserveLicenseComments: false,
           paths: { 
             aura:         'lib',
-            jquery:       'components/jquery/jquery',
-            underscore:   'components/underscore/underscore',
+            jquery:       'empty:',
+            underscore:   'empty:',
             eventemitter: 'components/eventemitter2/lib/eventemitter2'
           },
           shim: {
             underscore: { exports: '_' }
           },
-          include: ['aura/aura', 'aura/ext/debug', 'aura/ext/pubsub', 'aura/ext/widgets'],
+          include: ['aura/aura', 'aura/ext/debug', 'aura/ext/mediator', 'aura/ext/widgets'],
           exclude: ['jquery'],
           out: 'dist/aura.js'
         }
