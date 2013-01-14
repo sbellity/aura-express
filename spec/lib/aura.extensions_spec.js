@@ -36,7 +36,8 @@ define(['aura/aura.extensions'], function(ExtManager) {
 
       it("Should be possible to add extensions", function(done) {
         var mgr = new ExtManager(),
-            ext1 = { ref: sinon.spy(), context: "ext1" }, ext2 = { ref: sinon.spy(), context: "ext2" };
+            ext1 = { ref: sinon.spy(), context: "ext1" }, 
+            ext2 = { ref: sinon.spy(), context: "ext2" };
         
         mgr.add(ext1);
         mgr.add(ext2);
@@ -57,6 +58,26 @@ define(['aura/aura.extensions'], function(ExtManager) {
         addExt.should.Throw(Error);
       });
 
+      it("Should ensure extensions are loaded sequentially", function(done) {
+        var mgr = new ExtManager(),
+            ctx = { foo: "Bar" },
+            ext1 = { init: function(c) { 
+              var later = $.Deferred();
+              _.delay(function() { 
+                c.ext1Loaded = true; 
+                later.resolve();
+              }, 500);
+              return later;
+            }},
+            ext2 = function(c) { c.ext1Loaded.should.equal(true); };
+        mgr.add({ ref: ext1, context: ctx });
+        mgr.add({ ref: ext2, context: ctx });
+        mgr.init().done(function() {
+          done();
+        });
+      });
+
+
       it("Should be possible to add an extension via its module ref name", function(done) {
         var mgr = new ExtManager(),
             ext = { init: sinon.spy(), foo: "bar" };
@@ -69,22 +90,57 @@ define(['aura/aura.extensions'], function(ExtManager) {
           done();
         });
       });
+    });
+
+    describe("Error handling", function() {
+      
+      it("Should fail init if a ext ref is not found", function(done) {
+        new ExtManager().add({ ref: "nope" }).init().fail(function() {
+          done();
+        });
+      });
+
+      it("Should fail init if a dependency is not found", function(done) {
+        var ext = { require: { paths: { not_here: 'not_here' } }, init: sinon.spy() },
+            mgr = new ExtManager();
+        mgr.add({ ref: ext });
+        mgr.init().fail(function() {
+          done();
+        });
+      });
+
+    });
+
+    describe("Lifecycle", function() {
 
       it("Should call onReady callbacks when all extensions have been loaded", function(done) {
-        var mgr   = new ExtManager(),
-            ctx   = {},
-            ready = sinon.spy();
+        var mgr       = new ExtManager(),
+            ctx       = {},
+            ready     = sinon.spy(),
+            alsoReady = sinon.spy();
         define("ext1", { init: function(c) { c.one = true; } });
         define("ext2", { init: function(c) { c.two = true; } });
         mgr.add({ ref: "ext1", context: ctx });
         mgr.add({ ref: "ext2", context: ctx });
         mgr.onReady(ready);
-        mgr.init().done(function() {
+        mgr.onReady(alsoReady);
+        var init = mgr.init();
+        init.then(function() {
           ready.should.have.been.called;
+          alsoReady.should.have.been.called;
           done();
         });
       });
 
+      it("Should call onFailure callbacks when init has failed", function(done) {
+        var onFail = sinon.spy(),
+            mgr    = new ExtManager().add({ ref: 'vapor' });
+        mgr.onFailure(onFail);
+        mgr.init().fail(function() {
+          onFail.should.have.been.called;
+          done();
+        });
+      });
     });
 
 
