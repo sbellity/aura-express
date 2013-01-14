@@ -66,7 +66,7 @@ define(['aura/aura.extensions'], function(ExtManager) {
               _.delay(function() { 
                 c.ext1Loaded = true; 
                 later.resolve();
-              }, 500);
+              }, 100);
               return later;
             }},
             ext2 = function(c) { c.ext1Loaded.should.equal(true); };
@@ -76,7 +76,6 @@ define(['aura/aura.extensions'], function(ExtManager) {
           done();
         });
       });
-
 
       it("Should be possible to add an extension via its module ref name", function(done) {
         var mgr = new ExtManager(),
@@ -134,9 +133,9 @@ define(['aura/aura.extensions'], function(ExtManager) {
 
       it("Should call onFailure callbacks when init has failed", function(done) {
         var onFail = sinon.spy(),
-            mgr    = new ExtManager().add({ ref: 'vapor' });
+            mgr    = new ExtManager().add({ ref: { init: function() { throw new Error('FAIL'); }} });
         mgr.onFailure(onFail);
-        mgr.init().fail(function() {
+        mgr.init().always(function() {
           onFail.should.have.been.called;
           done();
         });

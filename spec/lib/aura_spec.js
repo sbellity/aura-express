@@ -24,7 +24,8 @@ define(['aura/aura'], function(aura) {
 
       // Make sure the app is started before...
       before(function(done) {
-        initStatus.then(function() { done(); });
+        initStatus.done(function() { done(); });
+        initStatus.fail(done);
       });
 
       it("Should have loaded its core dependencies", function() {
