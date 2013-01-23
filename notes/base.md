@@ -18,7 +18,6 @@ Current status:
 - eventemitter2, for the moment. we could also have a look at postal.js which is extensible and may suit more our needs.
 - the selector engine is required by the widgets extension, which is always included for the moment. but we don't really have to.
 
-
 ### since we're here, is their a minimum browser requirement for aura? a recommended browser/cpu requirement?
 
 it should work everywhere. aura itself is really tiny !

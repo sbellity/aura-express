@@ -79,13 +79,14 @@ define(['aura/aura.extensions'], function(ExtManager) {
 
       it("Should be possible to add an extension via its module ref name", function(done) {
         var mgr = new ExtManager(),
-            ext = { init: sinon.spy(), foo: "bar" };
+            ext = { init: sinon.spy(), foo: "bar" },
+            ctx = { foo: "bar" };
 
         define("myExt", ext);
-        mgr.add({ ref: "myExt", context: "yep" });
+        mgr.add({ ref: "myExt", context: ctx });
         mgr.init().done(function(extResolved) {
-          ext.init.should.have.been.calledWith("yep");
-          extResolved.foo.should.equal("bar");
+          extResolved[0].foo.should.equal("bar");
+          ext.init.should.have.been.calledWith(ctx);
           done();
         });
       });
