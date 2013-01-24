@@ -5,7 +5,7 @@ define(['aura/aura'], function(aura) {
 
   describe("Aura Apps", function() {
     describe("App Public API", function() {
-    
+
       var ext = {
         init: sinon.spy(function(app) {
           app.sandbox.foo = "bar";
@@ -14,7 +14,7 @@ define(['aura/aura'], function(aura) {
       };
 
       var App = aura();
-      
+
       App.use(ext);
 
       var startOptions  = { foo: "bar" };
@@ -37,21 +37,21 @@ define(['aura/aura'], function(aura) {
         App.start.should.be.a('function');
         App.stop.should.be.a('function');
       });
-        
+
       it("Should call init method on extension", function() {
         ext.init.should.have.been.calledWith(App);
       });
-            
+
       it("Should call afterAppStart method on extension", function() {
         ext.afterAppStart.should.have.been.called; //With(App);
       });
-      
+
       it("Should have extended the sandbox", function() {
         App.sandbox.foo.should.equal('bar');
       });
 
       it("Should complain if I try to use a new extension and the app is already started", function() {
-        App.use.should.Throw(Error);
+        (function() { App.use(function() {}) }).should.Throw(Error);
       });
     });
 

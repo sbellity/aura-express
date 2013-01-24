@@ -50,7 +50,7 @@ module.exports = function(grunt) {
           shim: {
             underscore: { exports: '_' }
           },
-          include: ['aura/aura', 'aura/ext/debug', 'aura/ext/mediator', 'aura/ext/widgets'],
+          include: ['aura/aura', 'aura/aura.extensions', 'aura/ext/debug', 'aura/ext/mediator', 'aura/ext/widgets'],
           exclude: ['jquery'],
           out: 'dist/aura.js'
         }
