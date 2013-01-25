@@ -93,7 +93,10 @@ module.exports = function(grunt) {
 
     mocha: {
       aura: {
-        src: ['http://localhost:' + port + "/spec/index.html"]
+        options: {
+
+          urls: ['http://localhost:' + port + "/spec/index.html"]
+        }
       }
     },
 

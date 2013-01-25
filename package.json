@@ -9,13 +9,13 @@
     "grunt": "~0.4", 
     "grunt-cli": "~0.1",
     "grunt-lib-phantomjs": "~0.1",
-    "grunt-contrib-clean" : "~0.1",
-    "grunt-contrib-watch" : "~0.1",
-    "grunt-contrib-connect": "~0.1",
+    "grunt-contrib-clean" : "~0.4.0rc6",
+    "grunt-contrib-watch" : "~0.2.0rc5",
+    "grunt-contrib-connect": "~0.1.1rc6",
     "grunt-contrib-requirejs" : "~0.3",
-    "grunt-contrib-jshint": "~0.1",
+    "grunt-contrib-jshint": "~0.1.1rc6",
     "grunt-bower-task": "*",
-    "grunt-mocha": "~0.2",
+    "grunt-mocha": "https://github.com/tony/grunt-mocha/archive/gruntv0.4.0-urls.tar.gz",
     "grunt-dox": "*",
     "mocha-phantomjs": "*"
   }
