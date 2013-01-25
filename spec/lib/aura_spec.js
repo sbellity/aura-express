@@ -51,7 +51,8 @@ define(['aura/aura'], function(aura) {
       });
 
       it("Should complain if I try to use a new extension and the app is already started", function() {
-        (function() { App.use(function() {}) }).should.Throw(Error);
+        var use = function() { App.use(function() {}); };
+        use.should.Throw(Error);
       });
     });
 
