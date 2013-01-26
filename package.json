@@ -15,8 +15,8 @@
     "grunt-contrib-requirejs" : "~0.3",
     "grunt-contrib-jshint": "~0.1.1rc6",
     "grunt-bower-task": "*",
-    "grunt-mocha": "https://github.com/tony/grunt-mocha/archive/gruntv0.4.0-urls.tar.gz",
+    "grunt-mocha": "~0.2.x",
     "grunt-dox": "*",
-    "mocha-phantomjs": "*"
+    "mocha-phantomjs": ""
   }
 }

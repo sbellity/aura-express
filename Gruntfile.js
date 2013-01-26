@@ -7,7 +7,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bower-task');
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-mocha');
-  grunt.loadNpmTasks('grunt-dox');
+  
 
   var port = 8899;
 
@@ -19,13 +19,6 @@ module.exports = function(grunt) {
 
     pkg: grunt.file.readJSON('package.json'),
     
-    dox: {
-      files: {
-        src: 'lib/**/*.js',
-        dest: 'docs'
-      }
-    },
-
     connect: {
       server: {
         options: {
@@ -57,7 +50,7 @@ module.exports = function(grunt) {
           shim: {
             underscore: { exports: '_' }
           },
-          include: ['aura/aura', 'aura/ext/debug', 'aura/ext/mediator', 'aura/ext/widgets'],
+          include: ['aura/aura', 'aura/aura.extensions', 'aura/ext/debug', 'aura/ext/mediator', 'aura/ext/widgets'],
           exclude: ['jquery'],
           out: 'dist/aura.js'
         }
@@ -94,7 +87,6 @@ module.exports = function(grunt) {
     mocha: {
       aura: {
         options: {
-
           urls: ['http://localhost:' + port + "/spec/index.html"]
         }
       }

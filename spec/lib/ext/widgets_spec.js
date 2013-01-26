@@ -26,19 +26,17 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
   describe("Widgets API", function() {
 
-    var env, app, BaseWidget,
-        ext = function(appEnv) { env = appEnv; };
-
-    var yeahInit = sinon.spy();
-    var yeahWidget = makeSpyWidget("yeah", { initialize: yeahInit });
+    var app, BaseWidget,
+        yeahInit = sinon.spy(),
+        yeahWidget = makeSpyWidget("yeah", { initialize: yeahInit });
 
     describe("Playing with Widgets", function() {
 
       beforeEach(function(done) {
-        app = aura(appConfig).use(ext);
+        app = aura(appConfig);
         var container = buildAppMarkup('<div id="dummy-' + app.ref + '" data-aura-widget="dummy"></div><div data-aura-widget="yeah"></div>');
         app.start({ widgets: container }).then(function() {
-          BaseWidget = env.core.Widgets.Base;
+          BaseWidget = app.core.Widgets.Base;
           done();
         });
       });
@@ -46,8 +44,8 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
       describe("Widgets Extension", function() {
 
         it("Should define the widgets registry and base Widget on core", function() {
-          env.core.Widgets.should.be.a('object');
-          env.core.Widgets.Base.should.be.a('function');
+          app.core.Widgets.should.be.a('object');
+          app.core.Widgets.Base.should.be.a('function');
         });
 
       });
@@ -116,8 +114,8 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
       // An extension to load it
       var ext = {
-        init: function(env) {
-          env.core.registerWidgetType("NewWidgetType", NewWidgetType);
+        init: function(app) {
+          app.core.registerWidgetType("NewWidgetType", NewWidgetType);
         }
       };
 
@@ -168,10 +166,7 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
 
       before(function(done) {
-        var env;
-        var ext = { init: function(appEnv) { env = appEnv; } };
         app = aura();
-        app.use(ext);
         
         // Adding the source
         app.registerWidgetsSource("anotherSource", "remoteWidgets");
@@ -198,10 +193,9 @@ define(['aura/aura', 'aura/ext/widgets'], function(aura, ext) {
 
       var anExternalWidget = makeSpyWidget('ext_widget@aSource');
       
-      var app, env, ext = { 
-        init: function(appEnv) {
-          env = appEnv;
-          env.core.registerWidgetsSource('aSource', 'aUrl');
+      var app, ext = { 
+        init: function(app) {
+          app.registerWidgetsSource('aSource', 'aUrl');
         } 
       };
       before(function(done) {
