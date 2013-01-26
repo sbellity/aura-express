@@ -78,6 +78,10 @@ they are responsible for :
 
 Extensions can have multiple forms : 
 
+*Module name*
+
+    aura().use('my/ext')
+
 *Function*
 
     var ext = function(app) {
@@ -88,6 +92,7 @@ Extensions can have multiple forms :
 *Object litteral*
 
     var ext = {
+      require: {},
       init: function(app) {
         app.core.hello = function() {  alert("Hello World") };
       }
