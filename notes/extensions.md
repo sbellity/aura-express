@@ -155,7 +155,44 @@ When all the app's extensions are finally loaded, the extensions `ext.afterAppSt
 
 After `app.start` has been called, it is not possible to register new extensions.
 
+*Example of an extension with an init method that returns a promise*
 
+Let's wrap FB sdk as an aura extension : 
+
+    var facebookExtension = {
+      
+      require: {
+        paths: {
+          facebook: 'http://connect.facebook.net/en_US/all.js'
+        }
+      },
+
+      init: function(app) {
+        var status = app.core.data.deferred();
+        app.sandbox.auth = {
+          login: FB.login,
+          logout: FB.logout
+        };
+        
+        FB.init({ appId: 'xxx' });
+        
+        FB.getLoginStatus(function(res) {
+          app.sandbox.auth.loginStatus = res;
+          status.resolve(res);
+        }, true);
+
+        return status;
+      },
+
+      afterAppStart: function(app) {
+        console.warn("The app is started and I am : ", app.sandbox.auth.loginStatus);
+      }
+
+    }
+
+    aura().use(facebookExtension).start().then(function() {
+      console.warn("My app is now started... and I am sure that getLoginStatus has been called and has returned somthing...");
+    });
 
 
 #### 2.2 what it can execute in 
