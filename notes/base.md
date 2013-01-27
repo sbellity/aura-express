@@ -22,10 +22,14 @@ Current status:
 
 it should work everywhere. aura itself is really tiny !
 
-We should have a way to CI on several browsers... -> http://vojtajina.github.com/testacular/
+We should have a way to CI on several browsers... ->
 
+- http://vojtajina.github.com/testacular/
+- http://yeti.cx/
+- https://npmjs.org/package/bunyip
+- https://npmjs.org/package/browserstack
 
-### does aura has a core functionality or extension to see if a browser can utilitize something, like hasjs? is this a potential extension idea?
+### Does aura has a core functionality or extension to see if a browser can utilitize something, like hasjs? is this a potential extension idea?
 
-not yet, but it would definitely be nice to have. 
-for the moment the `platform.js` file is a collection of polyfills for older browsers, but it does not really scale...
+  Not yet, but it would definitely be nice to have. 
+  For the moment the `platform.js` file is a collection of polyfills for older browsers, but it does not really scale...
