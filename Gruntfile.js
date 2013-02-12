@@ -85,11 +85,7 @@ module.exports = function(grunt) {
     },
 
     mocha: {
-      aura: {
-        options: {
-          urls: ['http://localhost:' + port + "/spec/index.html"]
-        }
-      }
+      aura: ["spec/index.html"]
     },
 
     watch: {
