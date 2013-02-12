@@ -18,5 +18,8 @@
     "grunt-mocha": "~0.2.x",
     "grunt-dox": "*",
     "mocha-phantomjs": ""
+  },
+  "scripts" : {
+    "test" : "grunt build"
   }
 }
