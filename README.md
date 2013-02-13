@@ -12,21 +12,23 @@ Its responsibilities are to load extensions when the app starts and clean them u
 
 ### Extension
 
-An extension are loaded in your application when it starts. They allow you to add features to your app. Those are available to the widgets through their `sandbox`.
+Extensions are loaded in your application when it starts. They allow you to add features to the application, and are available to the widgets through their `sandbox`.
 
 ### Core
 
-The `core` implements aliases for DOM manipulation, templating and other lower-level utilities that pipe back to a library of choice. Aliases allow you to switch libraries with minimum impact on your application.
+The `core` implements aliases for DOM manipulation, templating and other lower-level utilities that pipe back to a library of choice. Aliases allow to switch libraries with minimum impact on your application.
 
 ### Sandbox
 
-A `sandbox` is just way to implement the facade pattern on top of features provided by `core`. It allow you to expose the parts of JavaScript library that are safe to use instead of exposing the entire API. This is particularly useful when working in teams.
+A `sandbox` is just way to implement the [facade](http://addyosmani.com/resources/essentialjsdesignpatterns/book/#facadepatternjavascript) pattern on top of features provided by `core`. It lets you to expose the parts of a JavaScript library that are safe to use instead of exposing the entire API. This is particularly useful when working in teams.
 
 When your app starts, it will create an instance of `sandbox` in each of your widgets.
 
 ### Widget
 
-A widget represents an unit of a page. Each widget is independant that mean that they know nothing about each other. To make them communicate, Publish/Subscribe can be used.
+A widget represents an unit of a page. Each widget is independant.
+This means that they know nothing about each other. To make them communicate, a [Publish/Subscribe (Mediator)](http://addyosmani.com/resources/essentialjsdesignpatterns/book/#mediatorpatternjavascript) pattern is used.
+
 
 ## Getting started
 
@@ -46,15 +48,15 @@ Now that we have your `app`, we can start it.
 	  widget: "body"
 	});
 
-This starts the app by saying that it should search widgets everywhere in the `body` of your HTML document.
+This starts the app by saying that it should search for widgets anywhere in the `body` of your HTML document.
 
 ### Creating a Widget
 
-By default widgets are looked after in a directory called `widgets/` that should be at the same level as your HTML document.
+By default widgets are retreived from a directory called `widgets/` that must be at the same level as your HTML document.
 
-Let's say that we want to create an "hello" widget. To do that we need to create a `hello/` directory in the `widgets/`.
+Let's say we want to create an "hello" widget. To do that we need to create a `widgets/hello/` directory
 
-This directory should contains:
+This directory must contain:
 
 - A `main.js` file. It will bootstrap and describe the widget. It is mandatory, no matter how small it can be.
 - All the other files that your widget needs (models, templates, …).
