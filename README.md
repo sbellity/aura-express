@@ -34,7 +34,18 @@ This means that they know nothing about each other. To make them communicate, a 
 
 ### Building Aura.js
 
-<!-- TODO -->
+1. Run `npm install` and `bower install` to install Aura dependencies.
+2. Run `grunt build`. `aura.js` will be placed in `dist/`.
+
+### How to run tests
+
+#### Browser
+
+Start the developement server. Run `grunt`. Then visit `http://localhost:8899/spec/`.
+
+#### CLI
+
+Run `grunt mocha`.
 
 ### Creating an Application
 
@@ -77,6 +88,24 @@ Add the following code to your HTML document.
 
 Aura will call the `initialize` method that we have defined in `widgets/hello/main.js`.
 
-# Extensions
+### Creating extension
 
-<!-- TODO -->
+Imagine that we need an helper to reverse string. To do that we need to create an extension.
+
+    define("extentions/reverse", {
+      init: function(app) {
+        app.core.util.reverse = function(string) {
+          return string.split("").reverse().join("");
+        };
+      }
+    });
+    
+### Using extension
+
+To make our `reserve` helper available in our app, run the following code:
+    
+    app.use("extentions/reverse");
+    
+This will call the `init` function of our reserve extension.
+
+Calling `use` when your `app` is allready started will throw an error.
