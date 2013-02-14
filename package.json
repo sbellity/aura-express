@@ -18,5 +18,9 @@
     "grunt-mocha": "~0.2.x",
     "grunt-dox": "*",
     "mocha-phantomjs": ""
+  },
+  "scripts": {
+    "install": "./node_modules/bower/bin/bower install",
+    "test": "bower install; grunt build"
   }
 }
