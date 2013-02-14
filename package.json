@@ -20,6 +20,6 @@
     "mocha-phantomjs": ""
   },
   "scripts": {
-    "test": "bower install; grunt build"
+    "test": "./node_modules/grunt-bower-task/node_modules/.bin/bower install; grunt build"
   }
 }

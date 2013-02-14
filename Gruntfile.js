@@ -27,15 +27,6 @@ module.exports = function(grunt) {
         }
       }
     },
-    bower: {
-      install: {
-        options: {
-          cleanup: true,
-          install: true,
-          targetDir: './vendor'
-        }
-      }
-    },
     requirejs: {
       compile: {
         options: {
